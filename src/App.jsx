@@ -1,9 +1,21 @@
+import { useState } from "react";
+import "./styles.css";
+
 export default function App() {
   return (
     <div className="App">
+      <h1>The Flashcards App</h1>
+      <h3>Click on the questions to know the answer. Test your React Knowledge</h3>
+      <Input />
       <FlashCards />
     </div>
   );
+}
+
+function Input(){
+  return(
+    <div></div>
+  )
 }
 
 const questions = [
@@ -41,5 +53,31 @@ const questions = [
 ];
 
 function FlashCards() {
-  return <div>TODO</div>;
+  const [selectedId, setSelectedId] = useState(null);
+
+  function handleClick(id) {
+    setSelectedId(id !== selectedId ? id : null);
+  }
+
+  return (
+    <div className="flashcards">
+      {questions.map(({ id, question, answer }) => (
+        <div 
+          key={id} 
+          className={`flashcard ${id === selectedId ? 'selected' : ''}`} 
+          onClick={() => handleClick(id)}
+          tabIndex={0}
+          onKeyPress={e => { if (e.key === 'Enter') handleClick(id); }}
+          role="button"
+          aria-pressed={id === selectedId}
+        >
+          <div className="card-inner">
+            <div className="card-front">{question}</div>
+            <div className="card-back">{answer}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
+
